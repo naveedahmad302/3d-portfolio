@@ -119,7 +119,7 @@ function RobotCharacter({
     // Idle floating animation
     if (groupRef.current) {
       groupRef.current.position.y =
-        Math.sin(t * 1.2) * 0.05;
+        -0.3 + Math.sin(t * 1.2) * 0.05;
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         mouseRef.current.x * 0.3,
