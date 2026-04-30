@@ -13,6 +13,7 @@ import TerminalSection from "@/components/terminal/TerminalSection";
 import ContactSection from "@/components/contact/ContactSection";
 import Footer from "@/components/footer/Footer";
 import SectionDivider from "@/components/common/SectionDivider";
+import ParticleBackground from "@/components/effects/ParticleBackground";
 import GridOverlay from "@/components/effects/GridOverlay";
 
 const CustomCursor = dynamic(
@@ -21,10 +22,6 @@ const CustomCursor = dynamic(
 );
 const SkillsSection = dynamic(
   () => import("@/components/skills/SkillsSection"),
-  { ssr: false }
-);
-const ParticleBackground = dynamic(
-  () => import("@/components/effects/ParticleBackground"),
   { ssr: false }
 );
 

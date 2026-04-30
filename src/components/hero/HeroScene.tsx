@@ -4,10 +4,11 @@ import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   Float,
+  Stars,
   MeshDistortMaterial,
   Sphere,
   Torus,
-  Environment,
+  OrbitControls,
 } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -16,39 +17,53 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x);
 }
 
-function SoftParticles() {
-  const count = 800;
+function ParticleField() {
+  const count = 2000;
   const meshRef = useRef<THREE.Points>(null);
 
-  const [positions, sizes] = useMemo(() => {
+  const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
-    const sz = new Float32Array(count);
+    const col = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (seededRandom(i * 3) - 0.5) * 25;
-      pos[i * 3 + 1] = (seededRandom(i * 3 + 1) - 0.5) * 25;
-      pos[i * 3 + 2] = (seededRandom(i * 3 + 2) - 0.5) * 25;
-      sz[i] = seededRandom(i * 7) * 0.04 + 0.01;
+      pos[i * 3] = (seededRandom(i * 3) - 0.5) * 30;
+      pos[i * 3 + 1] = (seededRandom(i * 3 + 1) - 0.5) * 30;
+      pos[i * 3 + 2] = (seededRandom(i * 3 + 2) - 0.5) * 30;
+
+      const c = new THREE.Color();
+      c.setHSL(0.5 + seededRandom(i * 7) * 0.3, 0.8, 0.6);
+      col[i * 3] = c.r;
+      col[i * 3 + 1] = c.g;
+      col[i * 3 + 2] = c.b;
     }
-    return [pos, sz];
+    return [pos, col];
   }, []);
 
   useFrame((state) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.y = state.clock.elapsedTime * 0.015;
+    meshRef.current.rotation.y = state.clock.elapsedTime * 0.02;
+    meshRef.current.rotation.x =
+      Math.sin(state.clock.elapsedTime * 0.01) * 0.1;
   });
 
   return (
     <points ref={meshRef}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-        <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+        />
       </bufferGeometry>
       <pointsMaterial
-        size={0.04}
-        color="#a78bfa"
+        size={0.03}
+        vertexColors
         transparent
-        opacity={0.4}
+        opacity={0.8}
         sizeAttenuation
+        blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
     </points>
@@ -60,33 +75,37 @@ function FloatingGeometries() {
 
   useFrame((state) => {
     if (!groupRef.current) return;
-    groupRef.current.rotation.y = state.clock.elapsedTime * 0.03;
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.05;
   });
 
   return (
     <group ref={groupRef}>
-      <Float speed={2} rotationIntensity={1.5} floatIntensity={1}>
+      <Float speed={2} rotationIntensity={2} floatIntensity={1}>
         <Sphere args={[1, 64, 64]} position={[-3, 1, -2]}>
           <MeshDistortMaterial
-            color="#818cf8"
-            roughness={0.1}
-            metalness={0.3}
-            distort={0.35}
+            color="#00f5ff"
+            emissive="#00f5ff"
+            emissiveIntensity={0.3}
+            roughness={0.2}
+            metalness={0.8}
+            distort={0.4}
             speed={2}
             transparent
-            opacity={0.5}
+            opacity={0.8}
           />
         </Sphere>
       </Float>
 
-      <Float speed={1.5} rotationIntensity={2} floatIntensity={1.5}>
-        <Torus args={[1.2, 0.12, 16, 100]} position={[3, -1, -3]}>
+      <Float speed={1.5} rotationIntensity={3} floatIntensity={1.5}>
+        <Torus args={[1.2, 0.15, 16, 100]} position={[3, -1, -3]}>
           <meshStandardMaterial
-            color="#7c3aed"
+            color="#ff00ff"
+            emissive="#ff00ff"
+            emissiveIntensity={0.4}
             roughness={0.1}
-            metalness={0.6}
+            metalness={0.9}
             transparent
-            opacity={0.4}
+            opacity={0.7}
           />
         </Torus>
       </Float>
@@ -95,10 +114,12 @@ function FloatingGeometries() {
         <mesh position={[0, 2, -4]}>
           <icosahedronGeometry args={[0.7, 1]} />
           <meshStandardMaterial
-            color="#06b6d4"
+            color="#00ff88"
+            emissive="#00ff88"
+            emissiveIntensity={0.3}
             wireframe
             transparent
-            opacity={0.35}
+            opacity={0.6}
           />
         </mesh>
       </Float>
@@ -107,23 +128,25 @@ function FloatingGeometries() {
         <mesh position={[-2, -2, -5]}>
           <octahedronGeometry args={[0.8, 0]} />
           <meshStandardMaterial
-            color="#4f46e5"
+            color="#ffaa00"
+            emissive="#ffaa00"
+            emissiveIntensity={0.3}
             transparent
-            opacity={0.3}
+            opacity={0.5}
             wireframe
           />
         </mesh>
       </Float>
 
-      <Float speed={1.2} rotationIntensity={3} floatIntensity={0.8}>
+      <Float speed={1.2} rotationIntensity={4} floatIntensity={0.8}>
         <mesh position={[4, 2, -6]}>
           <torusKnotGeometry args={[0.5, 0.15, 128, 32]} />
           <meshStandardMaterial
-            color="#a78bfa"
+            color="#ff00ff"
+            emissive="#ff00ff"
+            emissiveIntensity={0.2}
             transparent
-            opacity={0.3}
-            roughness={0.1}
-            metalness={0.5}
+            opacity={0.4}
           />
         </mesh>
       </Float>
@@ -149,18 +172,34 @@ export default function HeroScene() {
         gl={{ antialias: true, alpha: true }}
         dpr={[1, 1.5]}
       >
-        <color attach="background" args={["#f0f2f8"]} />
-        <fog attach="fog" args={["#f0f2f8", 12, 30]} />
+        <color attach="background" args={["#050510"]} />
+        <fog attach="fog" args={["#050510", 10, 30]} />
 
-        <ambientLight intensity={0.9} />
-        <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
-        <directionalLight position={[-5, 3, 5]} intensity={0.4} color="#a78bfa" />
-        <pointLight position={[0, 5, -5]} intensity={0.3} color="#06b6d4" />
+        <ambientLight intensity={0.15} />
+        <pointLight position={[5, 5, 5]} intensity={0.8} color="#00f5ff" />
+        <pointLight position={[-5, -5, 5]} intensity={0.6} color="#ff00ff" />
+        <pointLight position={[0, 5, -5]} intensity={0.4} color="#00ff88" />
 
-        <SoftParticles />
+        <ParticleField />
         <FloatingGeometries />
+        <Stars
+          radius={50}
+          depth={80}
+          count={3000}
+          factor={3}
+          saturation={0.5}
+          fade
+          speed={0.5}
+        />
         <CameraRig />
-        <Environment preset="apartment" />
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          maxPolarAngle={Math.PI / 2}
+          minPolarAngle={Math.PI / 3}
+          autoRotate
+          autoRotateSpeed={0.3}
+        />
       </Canvas>
     </div>
   );

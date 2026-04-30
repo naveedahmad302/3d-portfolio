@@ -99,11 +99,11 @@ export default function TerminalSection() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-xs font-mono tracking-[0.3em] text-primary/50 uppercase">
+          <span className="text-xs font-mono tracking-[0.3em] text-primary/60 uppercase">
             Interactive
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4">
-            <span className="text-foreground">Developer </span>
+            <span className="text-white">Developer </span>
             <span className="gradient-text">Terminal</span>
           </h2>
         </motion.div>
@@ -112,10 +112,10 @@ export default function TerminalSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="rounded-2xl overflow-hidden bg-[#1e1e2e] shadow-2xl"
+          className="glass rounded-2xl overflow-hidden"
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-[#181825]">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
@@ -132,7 +132,7 @@ export default function TerminalSection() {
               <div key={i} className="mb-2">
                 {line.type === "input" ? (
                   <div className="flex items-center gap-2">
-                    <span className="text-[#89b4fa]">&#x276F;</span>
+                    <span className="text-primary">&#x276F;</span>
                     <span className="text-white/80">{line.content}</span>
                   </div>
                 ) : (
@@ -144,18 +144,18 @@ export default function TerminalSection() {
             ))}
 
             <div className="flex items-center gap-2">
-              <span className="text-[#89b4fa]">&#x276F;</span>
+              <span className="text-primary">&#x276F;</span>
               <input
                 ref={inputRef}
                 type="text"
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent outline-none text-white/80 caret-[#89b4fa]"
+                className="flex-1 bg-transparent outline-none text-white/80 caret-primary"
                 spellCheck={false}
                 autoComplete="off"
               />
-              <span className="w-2 h-4 bg-[#89b4fa]/80 animate-blink" />
+              <span className="w-2 h-4 bg-primary/80 animate-blink" />
             </div>
           </div>
         </motion.div>
@@ -174,7 +174,7 @@ export default function TerminalSection() {
                   processCommand(cmd);
                   setCurrentInput("");
                 }}
-                className="text-[10px] font-mono px-3 py-1.5 rounded-full border border-foreground/10 text-foreground/40 hover:text-primary hover:border-primary/30 transition-all"
+                className="text-[10px] font-mono px-3 py-1.5 rounded-full border border-white/10 text-white/30 hover:text-primary hover:border-primary/30 transition-all"
               >
                 {cmd}
               </button>

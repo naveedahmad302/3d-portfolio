@@ -1,240 +1,121 @@
 "use client";
 
-import { useRef, useMemo, useEffect } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, MeshTransmissionMaterial } from "@react-three/drei";
-import * as THREE from "three";
+import { useEffect, useRef, useCallback } from "react";
 
-function seededRandom(seed: number): number {
-  const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
-  return x - Math.floor(x);
-}
-
-function GlassSphere({ position, scale, color, speed }: {
-  position: [number, number, number];
-  scale: number;
-  color: string;
-  speed: number;
-}) {
-  const ref = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    const t = state.clock.elapsedTime;
-    ref.current.position.y = position[1] + Math.sin(t * speed) * 0.3;
-    ref.current.position.x = position[0] + Math.sin(t * speed * 0.7) * 0.15;
-  });
-
-  return (
-    <mesh ref={ref} position={position} scale={scale}>
-      <sphereGeometry args={[1, 32, 32]} />
-      <MeshTransmissionMaterial
-        color={color}
-        thickness={0.5}
-        roughness={0.1}
-        transmission={0.95}
-        ior={1.5}
-        chromaticAberration={0.03}
-        backside
-      />
-    </mesh>
-  );
-}
-
-function FloatingRing({ position, scale, color, rotationSpeed }: {
-  position: [number, number, number];
-  scale: number;
-  color: string;
-  rotationSpeed: number;
-}) {
-  const ref = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    const t = state.clock.elapsedTime;
-    ref.current.rotation.x = t * rotationSpeed;
-    ref.current.rotation.z = t * rotationSpeed * 0.5;
-    ref.current.position.y = position[1] + Math.sin(t * 0.5) * 0.2;
-  });
-
-  return (
-    <mesh ref={ref} position={position} scale={scale}>
-      <torusGeometry args={[1, 0.08, 16, 64]} />
-      <meshStandardMaterial
-        color={color}
-        transparent
-        opacity={0.35}
-        roughness={0.1}
-        metalness={0.8}
-      />
-    </mesh>
-  );
-}
-
-function GlassCard({ position, rotation, scale }: {
-  position: [number, number, number];
-  rotation: [number, number, number];
-  scale: [number, number, number];
-}) {
-  const ref = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!ref.current) return;
-    const t = state.clock.elapsedTime;
-    ref.current.position.y = position[1] + Math.sin(t * 0.4) * 0.15;
-    ref.current.rotation.y = rotation[1] + Math.sin(t * 0.3) * 0.1;
-  });
-
-  return (
-    <mesh ref={ref} position={position} rotation={rotation} scale={scale}>
-      <planeGeometry args={[1, 1.4]} />
-      <meshPhysicalMaterial
-        color="#ffffff"
-        transparent
-        opacity={0.12}
-        roughness={0.05}
-        metalness={0.1}
-        side={THREE.DoubleSide}
-      />
-    </mesh>
-  );
-}
-
-function MorphingSphere({ position, color }: {
-  position: [number, number, number];
-  color: string;
-}) {
-  return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.8}>
-      <mesh position={position}>
-        <sphereGeometry args={[0.6, 64, 64]} />
-        <MeshDistortMaterial
-          color={color}
-          transparent
-          opacity={0.2}
-          roughness={0.1}
-          metalness={0.3}
-          distort={0.3}
-          speed={2}
-        />
-      </mesh>
-    </Float>
-  );
-}
-
-function ScrollReactiveObjects({ mouseRef }: { mouseRef: React.MutableRefObject<{ x: number; y: number }> }) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame(() => {
-    if (!groupRef.current) return;
-    const targetX = mouseRef.current.x * 0.3;
-    const targetY = mouseRef.current.y * 0.2;
-    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetX * 0.1, 0.02);
-    groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -targetY * 0.05, 0.02);
-  });
-
-  const objects = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 12; i++) {
-      items.push({
-        position: [
-          (seededRandom(i * 3) - 0.5) * 16,
-          (seededRandom(i * 3 + 1) - 0.5) * 12,
-          (seededRandom(i * 3 + 2) - 0.5) * 8 - 4,
-        ] as [number, number, number],
-        scale: seededRandom(i * 7) * 0.4 + 0.15,
-        color: ["#4f46e5", "#7c3aed", "#06b6d4", "#a78bfa", "#818cf8"][i % 5],
-        speed: seededRandom(i * 11) * 0.4 + 0.3,
-      });
-    }
-    return items;
-  }, []);
-
-  const rings = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 5; i++) {
-      items.push({
-        position: [
-          (seededRandom(i * 5 + 50) - 0.5) * 14,
-          (seededRandom(i * 5 + 51) - 0.5) * 10,
-          (seededRandom(i * 5 + 52) - 0.5) * 6 - 3,
-        ] as [number, number, number],
-        scale: seededRandom(i * 9 + 60) * 0.8 + 0.5,
-        color: ["#4f46e5", "#7c3aed", "#06b6d4"][i % 3],
-        rotationSpeed: seededRandom(i * 13 + 70) * 0.3 + 0.1,
-      });
-    }
-    return items;
-  }, []);
-
-  const cards = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 4; i++) {
-      items.push({
-        position: [
-          (seededRandom(i * 4 + 100) - 0.5) * 12,
-          (seededRandom(i * 4 + 101) - 0.5) * 8,
-          (seededRandom(i * 4 + 102) - 0.5) * 4 - 5,
-        ] as [number, number, number],
-        rotation: [
-          seededRandom(i * 4 + 103) * 0.5,
-          seededRandom(i * 4 + 104) * Math.PI,
-          seededRandom(i * 4 + 105) * 0.3,
-        ] as [number, number, number],
-        scale: [
-          seededRandom(i * 4 + 106) * 1.5 + 1,
-          seededRandom(i * 4 + 107) * 1.5 + 1,
-          1,
-        ] as [number, number, number],
-      });
-    }
-    return items;
-  }, []);
-
-  return (
-    <group ref={groupRef}>
-      {objects.map((obj, i) => (
-        <GlassSphere key={`sphere-${i}`} {...obj} />
-      ))}
-      {rings.map((ring, i) => (
-        <FloatingRing key={`ring-${i}`} {...ring} />
-      ))}
-      {cards.map((card, i) => (
-        <GlassCard key={`card-${i}`} {...card} />
-      ))}
-      <MorphingSphere position={[-5, 2, -6]} color="#a78bfa" />
-      <MorphingSphere position={[4, -2, -8]} color="#06b6d4" />
-      <MorphingSphere position={[6, 3, -5]} color="#4f46e5" />
-    </group>
-  );
+interface Particle {
+  x: number;
+  y: number;
+  size: number;
+  speedX: number;
+  speedY: number;
+  opacity: number;
+  hue: number;
 }
 
 export default function ParticleBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const particlesRef = useRef<Particle[]>([]);
+  const animFrameRef = useRef<number>(0);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+  const initParticles = useCallback((width: number, height: number) => {
+    const count = Math.min(80, Math.floor((width * height) / 15000));
+    particlesRef.current = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 2 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.3,
+      speedY: (Math.random() - 0.5) * 0.3,
+      opacity: Math.random() * 0.5 + 0.1,
+      hue: Math.random() * 60 + 160,
+    }));
   }, []);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles(canvas.width, canvas.height);
+    };
+
+    const handleMouse = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", handleMouse);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const particles = particlesRef.current;
+      const mouse = mouseRef.current;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 200) {
+          const force = (200 - dist) / 200;
+          p.x -= dx * force * 0.01;
+          p.y -= dy * force * 0.01;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 80%, 60%, ${p.opacity})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const d = Math.sqrt(
+            Math.pow(p.x - p2.x, 2) + Math.pow(p.y - p2.y, 2)
+          );
+          if (d < 150) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `hsla(${p.hue}, 60%, 50%, ${
+              ((150 - d) / 150) * 0.08
+            })`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouse);
+    };
+  }, [initParticles]);
+
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none">
-      <Canvas
-        camera={{ position: [0, 0, 10], fov: 50 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-      >
-        <ambientLight intensity={0.8} />
-        <directionalLight position={[10, 10, 5]} intensity={0.6} color="#ffffff" />
-        <directionalLight position={[-5, 5, -5]} intensity={0.3} color="#a78bfa" />
-        <pointLight position={[0, 5, 5]} intensity={0.4} color="#4f46e5" distance={20} />
-        <ScrollReactiveObjects mouseRef={mouseRef} />
-      </Canvas>
-    </div>
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-0 pointer-events-none"
+      style={{ opacity: 0.6 }}
+    />
   );
 }

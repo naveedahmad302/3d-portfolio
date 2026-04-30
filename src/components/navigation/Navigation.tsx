@@ -78,7 +78,7 @@ export default function Navigation() {
                 className={`px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                   activeSection === item.href.slice(1)
                     ? "text-primary bg-primary/10"
-                    : "text-foreground/50 hover:text-foreground hover:bg-foreground/5"
+                    : "text-white/60 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {item.label}
@@ -122,7 +122,7 @@ export default function Navigation() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
                 onClick={() => scrollTo(item.href)}
-                className="text-2xl font-medium text-foreground/70 hover:text-primary transition-colors"
+                className="text-2xl font-medium text-white/80 hover:text-primary transition-colors"
               >
                 {item.label}
               </motion.button>
