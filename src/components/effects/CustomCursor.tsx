@@ -31,7 +31,7 @@ export default function CustomCursor() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-primary/50 pointer-events-none z-[9998] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-primary/40 pointer-events-none z-[9998] hidden md:block"
         style={{
           x: springX,
           y: springY,
@@ -41,7 +41,7 @@ export default function CustomCursor() {
       />
       <div
         ref={dotRef}
-        className="fixed w-1 h-1 rounded-full bg-primary pointer-events-none z-[9998] hidden md:block"
+        className="fixed w-1.5 h-1.5 rounded-full bg-primary pointer-events-none z-[9998] hidden md:block"
         style={{ transform: "translate(-50%, -50%)" }}
       />
     </>

@@ -33,7 +33,7 @@ export default function HeroSection() {
               transition={{ delay: 2, duration: 0.8 }}
               className="mb-4"
             >
-              <span className="text-xs md:text-sm font-mono tracking-[0.4em] text-primary/70 uppercase">
+              <span className="text-xs md:text-sm font-mono tracking-[0.4em] text-primary/60 uppercase">
                 Welcome to my digital universe
               </span>
             </motion.div>
@@ -44,7 +44,7 @@ export default function HeroSection() {
               transition={{ delay: 2.2, duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
               className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-[0.9]"
             >
-              <span className="block text-white">{personalInfo.name.split(" ")[0]}</span>
+              <span className="block text-foreground">{personalInfo.name.split(" ")[0]}</span>
               <span className="block gradient-text">
                 {personalInfo.name.split(" ").slice(1).join(" ")}
               </span>
@@ -54,7 +54,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 2.5, duration: 0.8 }}
-              className="text-lg md:text-xl text-white/50 mb-8 font-light max-w-2xl lg:mx-0 mx-auto"
+              className="text-lg md:text-xl text-foreground/40 mb-8 font-light max-w-2xl lg:mx-0 mx-auto"
             >
               {personalInfo.title}
             </motion.p>
@@ -73,8 +73,8 @@ export default function HeroSection() {
                 }
                 className="group relative px-8 py-3 rounded-full overflow-hidden"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 transition-opacity" />
-                <span className="relative z-10 text-sm font-semibold text-black">
+                <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-90 group-hover:opacity-100 transition-opacity" />
+                <span className="relative z-10 text-sm font-semibold text-white">
                   Explore Work
                 </span>
               </button>
@@ -84,7 +84,7 @@ export default function HeroSection() {
                     .getElementById("contact")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="px-8 py-3 rounded-full border border-white/20 text-sm font-medium text-white/70 hover:text-white hover:border-primary/50 transition-all"
+                className="px-8 py-3 rounded-full border border-foreground/15 text-sm font-medium text-foreground/60 hover:text-foreground hover:border-primary/40 transition-all"
               >
                 Get in Touch
               </button>
@@ -113,10 +113,10 @@ export default function HeroSection() {
             transition={{ duration: 2, repeat: Infinity }}
             className="flex flex-col items-center gap-2"
           >
-            <span className="text-[10px] font-mono text-white/30 tracking-widest uppercase">
+            <span className="text-[10px] font-mono text-foreground/25 tracking-widest uppercase">
               Scroll
             </span>
-            <div className="w-5 h-8 rounded-full border border-white/20 flex justify-center pt-1.5">
+            <div className="w-5 h-8 rounded-full border border-foreground/15 flex justify-center pt-1.5">
               <motion.div
                 animate={{ y: [0, 10, 0], opacity: [1, 0, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
@@ -126,8 +126,6 @@ export default function HeroSection() {
           </motion.div>
         </motion.div>
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#050510] to-transparent z-10" />
     </section>
   );
 }
