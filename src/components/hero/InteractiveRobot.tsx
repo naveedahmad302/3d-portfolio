@@ -144,8 +144,7 @@ export default function InteractiveRobot() {
         </div>
 
         {/* Body */}
-        <motion.div
-          style={{ rotate: bodyTilt }}
+        <div
           className="absolute top-[100px] md:top-[122px] left-1/2 -translate-x-1/2 w-[100px] h-[80px] md:w-[130px] md:h-[100px]"
         >
           <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-b from-[#151535] to-[#0a0a20] border border-primary/15 overflow-hidden">
@@ -178,7 +177,7 @@ export default function InteractiveRobot() {
           {/* Shoulder joints */}
           <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-primary/20" />
           <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-accent/20" />
-        </motion.div>
+        </div>
 
         {/* Floating particles around robot */}
         {[...Array(5)].map((_, i) => (
