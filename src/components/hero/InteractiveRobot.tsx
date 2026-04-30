@@ -69,17 +69,17 @@ export default function InteractiveRobot() {
           className="absolute top-8 md:top-10 left-1/2 -translate-x-1/2 w-[120px] h-[90px] md:w-[150px] md:h-[110px] origin-bottom"
         >
           {/* Head shell */}
-          <div className="absolute inset-0 rounded-[28px] md:rounded-[32px] bg-gradient-to-b from-[#1a1a3e] to-[#0d0d25] border border-primary/20 overflow-hidden">
+          <div className="absolute inset-0 rounded-[28px] md:rounded-[32px] bg-gradient-to-b from-[#2a2a4a] to-[#1a1a35] border border-primary/25 overflow-hidden">
             {/* Head inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/8 to-transparent" />
             {/* Scanline effect */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.1) 2px, rgba(0,245,255,0.1) 4px)",
+            <div className="absolute inset-0 opacity-[0.04]" style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.12) 2px, rgba(0,245,255,0.12) 4px)",
             }} />
           </div>
 
           {/* Visor / Eye area */}
-          <div className="absolute top-[22px] md:top-[28px] left-1/2 -translate-x-1/2 w-[90px] md:w-[110px] h-[32px] md:h-[38px] rounded-[16px] bg-[#050515]/80 border border-primary/15 flex items-center justify-center gap-[20px] md:gap-[28px] overflow-hidden">
+          <div className="absolute top-[22px] md:top-[28px] left-1/2 -translate-x-1/2 w-[90px] md:w-[110px] h-[32px] md:h-[38px] rounded-[16px] bg-[#12122a]/80 border border-primary/20 flex items-center justify-center gap-[20px] md:gap-[28px] overflow-hidden">
             {/* Visor glow */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
             
@@ -140,14 +140,14 @@ export default function InteractiveRobot() {
 
         {/* Neck */}
         <div className="absolute top-[92px] md:top-[112px] left-1/2 -translate-x-1/2 w-[16px] md:w-[20px] h-[10px] md:h-[12px]">
-          <div className="w-full h-full bg-gradient-to-b from-[#1a1a3e] to-[#0d0d25] rounded-sm border-x border-primary/10" />
+          <div className="w-full h-full bg-gradient-to-b from-[#2a2a4a] to-[#1a1a35] rounded-sm border-x border-primary/15" />
         </div>
 
         {/* Body */}
         <div
           className="absolute top-[100px] md:top-[122px] left-1/2 -translate-x-1/2 w-[100px] h-[80px] md:w-[130px] md:h-[100px]"
         >
-          <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-b from-[#151535] to-[#0a0a20] border border-primary/15 overflow-hidden">
+          <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-b from-[#252548] to-[#181832] border border-primary/20 overflow-hidden">
             {/* Chest light */}
             <div className="absolute top-[16px] md:top-[20px] left-1/2 -translate-x-1/2">
               <motion.div
@@ -175,8 +175,8 @@ export default function InteractiveRobot() {
           </div>
 
           {/* Shoulder joints */}
-          <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-primary/20" />
-          <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-accent/20" />
+          <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#252548] border border-primary/25" />
+          <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#252548] border border-accent/25" />
         </div>
 
         {/* Floating particles around robot */}
