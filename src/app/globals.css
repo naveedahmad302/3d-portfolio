@@ -13,13 +13,13 @@
 }
 
 :root {
-  --background: #050510;
-  --foreground: #e0e0ff;
-  --primary: #00f5ff;
-  --accent: #ff00ff;
-  --neon: #00ff88;
-  --surface: #0a0a1a;
-  --surface-light: #111133;
+  --background: #f0f2f8;
+  --foreground: #1a1a2e;
+  --primary: #4f46e5;
+  --accent: #7c3aed;
+  --neon: #06b6d4;
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-light: rgba(255, 255, 255, 0.5);
 }
 
 * {
@@ -40,8 +40,8 @@ body {
 }
 
 ::selection {
-  background: rgba(0, 245, 255, 0.3);
-  color: #fff;
+  background: rgba(79, 70, 229, 0.2);
+  color: #1a1a2e;
 }
 
 ::-webkit-scrollbar {
@@ -49,7 +49,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: rgba(240, 242, 248, 0.8);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -59,63 +59,55 @@ body {
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(10, 10, 26, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 245, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
 }
 
 .glass-light {
-  background: rgba(17, 17, 51, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 245, 255, 0.08);
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* Glow effects */
+/* Glow effects — soft light theme */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3),
-    0 0 60px rgba(0, 245, 255, 0.1);
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.15),
+    0 0 80px rgba(79, 70, 229, 0.05);
 }
 
 .glow-accent {
-  box-shadow: 0 0 20px rgba(255, 0, 255, 0.3),
-    0 0 60px rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.15),
+    0 0 80px rgba(124, 58, 237, 0.05);
 }
 
 .glow-neon {
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3),
-    0 0 60px rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.15),
+    0 0 80px rgba(6, 182, 212, 0.05);
 }
 
 .text-glow {
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5),
-    0 0 40px rgba(0, 245, 255, 0.2);
+  text-shadow: 0 0 20px rgba(79, 70, 229, 0.25),
+    0 0 60px rgba(79, 70, 229, 0.1);
 }
 
 .text-glow-accent {
-  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5),
-    0 0 40px rgba(255, 0, 255, 0.2);
+  text-shadow: 0 0 20px rgba(124, 58, 237, 0.25),
+    0 0 60px rgba(124, 58, 237, 0.1);
 }
 
-/* Grid line background */
+/* Subtle grid background */
 .grid-bg {
   background-image: linear-gradient(
-      rgba(0, 245, 255, 0.03) 1px,
+      rgba(79, 70, 229, 0.04) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-
-/* Noise texture overlay */
-.noise-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1;
+    linear-gradient(90deg, rgba(79, 70, 229, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
 }
 
 /* Gradient borders */
@@ -129,7 +121,7 @@ body {
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, var(--primary), var(--accent), var(--neon));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -151,22 +143,6 @@ body {
   50% { background-position: 100% 50%; }
 }
 
-/* Scanline effect */
-.scanlines::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 245, 255, 0.01) 2px,
-    rgba(0, 245, 255, 0.01) 4px
-  );
-  pointer-events: none;
-  z-index: 2;
-}
-
 /* Custom cursor */
 .custom-cursor {
   cursor: none;
@@ -174,8 +150,8 @@ body {
 
 /* Pulse animation */
 @keyframes pulse-glow {
-  0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(0, 245, 255, 0.4); }
-  50% { opacity: 0.8; box-shadow: 0 0 40px rgba(0, 245, 255, 0.6); }
+  0%, 100% { opacity: 1; box-shadow: 0 0 20px rgba(79, 70, 229, 0.3); }
+  50% { opacity: 0.8; box-shadow: 0 0 40px rgba(79, 70, 229, 0.4); }
 }
 
 .animate-pulse-glow {

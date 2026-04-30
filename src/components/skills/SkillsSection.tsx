@@ -40,11 +40,11 @@ function SkillNode({
           <meshStandardMaterial
             color={skill.color}
             emissive={skill.color}
-            emissiveIntensity={hovered ? 0.8 : 0.3}
+            emissiveIntensity={hovered ? 0.5 : 0.15}
             roughness={0.2}
-            metalness={0.8}
+            metalness={0.6}
             transparent
-            opacity={hovered ? 0.95 : 0.7}
+            opacity={hovered ? 0.95 : 0.8}
           />
         </mesh>
 
@@ -52,7 +52,7 @@ function SkillNode({
           <Text
             position={[0, size + 0.3, 0]}
             fontSize={0.15}
-            color="white"
+            color="#1a1a2e"
             anchorX="center"
             anchorY="middle"
             font="/fonts/mono.woff"
@@ -119,7 +119,7 @@ function ConnectionLines() {
 
   return (
     <lineSegments ref={lineRef} geometry={geometry}>
-      <lineBasicMaterial color="#00f5ff" transparent opacity={0.06} />
+      <lineBasicMaterial color="#4f46e5" transparent opacity={0.08} />
     </lineSegments>
   );
 }
@@ -180,11 +180,11 @@ export default function SkillsSection() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-xs font-mono tracking-[0.3em] text-primary/60 uppercase">
+          <span className="text-xs font-mono tracking-[0.3em] text-primary/50 uppercase">
             Expertise
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4">
-            <span className="text-white">Skills </span>
+            <span className="text-foreground">Skills </span>
             <span className="gradient-text">Galaxy</span>
           </h2>
         </motion.div>
@@ -199,10 +199,10 @@ export default function SkillsSection() {
             camera={{ position: [0, 0, 9], fov: 50 }}
             dpr={[1, 1.5]}
           >
-            <color attach="background" args={["#050510"]} />
-            <ambientLight intensity={0.2} />
-            <pointLight position={[10, 10, 10]} intensity={0.5} color="#00f5ff" />
-            <pointLight position={[-10, -10, 10]} intensity={0.3} color="#ff00ff" />
+            <color attach="background" args={["#f0f2f8"]} />
+            <ambientLight intensity={0.8} />
+            <pointLight position={[10, 10, 10]} intensity={0.6} color="#4f46e5" />
+            <pointLight position={[-10, -10, 10]} intensity={0.4} color="#7c3aed" />
             <SkillsGalaxy />
             <OrbitControls
               enableZoom={false}
@@ -221,8 +221,8 @@ export default function SkillsSection() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all ${
                 activeCategory === cat
-                  ? "bg-primary/20 text-primary border border-primary/30"
-                  : "text-white/40 border border-white/10 hover:text-white/60"
+                  ? "bg-primary/15 text-primary border border-primary/25"
+                  : "text-foreground/40 border border-foreground/10 hover:text-foreground/60"
               }`}
             >
               {cat}
@@ -243,10 +243,10 @@ export default function SkillsSection() {
                 className="w-3 h-3 rounded-full mx-auto mb-3 group-hover:animate-pulse-glow"
                 style={{ backgroundColor: skill.color }}
               />
-              <div className="text-sm font-medium text-white/80 mb-1">
+              <div className="text-sm font-medium text-foreground/80 mb-1">
                 {skill.name}
               </div>
-              <div className="text-[10px] font-mono text-white/30">
+              <div className="text-[10px] font-mono text-foreground/30">
                 {skill.level}%
               </div>
             </motion.div>

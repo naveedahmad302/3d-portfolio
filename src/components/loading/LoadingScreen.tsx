@@ -26,12 +26,10 @@ export default function LoadingScreen() {
     <AnimatePresence>
       {!isComplete && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#050510]"
-          exit={{ opacity: 0, scale: 1.1 }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#f0f2f8]"
+          exit={{ opacity: 0, scale: 1.05 }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
-          <div className="noise-overlay absolute inset-0" />
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,7 +38,7 @@ export default function LoadingScreen() {
           >
             <div className="mb-8 text-center">
               <motion.div
-                className="text-sm font-mono tracking-[0.3em] text-primary/60 mb-4"
+                className="text-sm font-mono tracking-[0.3em] text-primary/50 mb-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -58,19 +56,19 @@ export default function LoadingScreen() {
             </div>
 
             <div className="w-64 md:w-80 relative">
-              <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-[2px] w-full bg-foreground/5 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full rounded-full"
                   style={{
                     background:
-                      "linear-gradient(90deg, #00f5ff, #ff00ff, #00ff88)",
+                      "linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4)",
                     width: `${Math.min(progress, 100)}%`,
                   }}
                   transition={{ duration: 0.1 }}
                 />
               </div>
               <div className="flex justify-between mt-3">
-                <span className="text-xs font-mono text-white/30">
+                <span className="text-xs font-mono text-foreground/30">
                   LOADING ASSETS
                 </span>
                 <span className="text-xs font-mono text-primary">
@@ -92,12 +90,12 @@ export default function LoadingScreen() {
                   style={{
                     borderColor:
                       progress > (i + 1) * 25
-                        ? "rgba(0,245,255,0.3)"
-                        : "rgba(255,255,255,0.05)",
+                        ? "rgba(79,70,229,0.3)"
+                        : "rgba(0,0,0,0.06)",
                     color:
                       progress > (i + 1) * 25
-                        ? "rgba(0,245,255,0.8)"
-                        : "rgba(255,255,255,0.2)",
+                        ? "rgba(79,70,229,0.8)"
+                        : "rgba(0,0,0,0.2)",
                   }}
                 >
                   {label}
@@ -106,7 +104,7 @@ export default function LoadingScreen() {
             </motion.div>
           </motion.div>
 
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </motion.div>
       )}
     </AnimatePresence>
