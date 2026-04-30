@@ -51,11 +51,11 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-xs font-mono tracking-[0.3em] text-primary/50 uppercase">
+          <span className="text-xs font-mono tracking-[0.3em] text-primary/60 uppercase">
             Connect
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4">
-            <span className="text-foreground">Get in </span>
+            <span className="text-white">Get in </span>
             <span className="gradient-text">Touch</span>
           </h2>
         </motion.div>
@@ -66,7 +66,7 @@ export default function ContactSection() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <p className="text-foreground/50 leading-relaxed mb-8">
+            <p className="text-white/50 leading-relaxed mb-8">
               Have a project in mind or want to collaborate? I&apos;d love to hear from
               you. Let&apos;s create something extraordinary together.
             </p>
@@ -87,10 +87,10 @@ export default function ContactSection() {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-foreground/30 mb-1">EMAIL</div>
+                  <div className="text-xs font-mono text-white/30 mb-1">EMAIL</div>
                   <a
                     href={`mailto:${personalInfo.email}`}
-                    className="text-foreground/70 hover:text-primary transition-colors"
+                    className="text-white/70 hover:text-primary transition-colors"
                   >
                     {personalInfo.email}
                   </a>
@@ -112,12 +112,12 @@ export default function ContactSection() {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-foreground/30 mb-1">GITHUB</div>
+                  <div className="text-xs font-mono text-white/30 mb-1">GITHUB</div>
                   <a
                     href={personalInfo.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-foreground/70 hover:text-accent transition-colors"
+                    className="text-white/70 hover:text-accent transition-colors"
                   >
                     naveedahmad302
                   </a>
@@ -142,7 +142,7 @@ export default function ContactSection() {
                     onChange={(e) =>
                       setFormData((d) => ({ ...d, name: e.target.value }))
                     }
-                    className="w-full glass rounded-xl px-4 py-3 text-sm text-foreground/80 placeholder-foreground/25 outline-none focus:border-primary/30 transition-colors bg-transparent"
+                    className="w-full glass rounded-xl px-4 py-3 text-sm text-white/80 placeholder-white/20 outline-none focus:border-primary/30 transition-colors bg-transparent"
                   />
                 </div>
                 <div>
@@ -154,7 +154,7 @@ export default function ContactSection() {
                     onChange={(e) =>
                       setFormData((d) => ({ ...d, email: e.target.value }))
                     }
-                    className="w-full glass rounded-xl px-4 py-3 text-sm text-foreground/80 placeholder-foreground/25 outline-none focus:border-primary/30 transition-colors bg-transparent"
+                    className="w-full glass rounded-xl px-4 py-3 text-sm text-white/80 placeholder-white/20 outline-none focus:border-primary/30 transition-colors bg-transparent"
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export default function ContactSection() {
                 onChange={(e) =>
                   setFormData((d) => ({ ...d, subject: e.target.value }))
                 }
-                className="w-full glass rounded-xl px-4 py-3 text-sm text-foreground/80 placeholder-foreground/25 outline-none focus:border-primary/30 transition-colors bg-transparent"
+                className="w-full glass rounded-xl px-4 py-3 text-sm text-white/80 placeholder-white/20 outline-none focus:border-primary/30 transition-colors bg-transparent"
               />
 
               <textarea
@@ -178,7 +178,7 @@ export default function ContactSection() {
                 onChange={(e) =>
                   setFormData((d) => ({ ...d, message: e.target.value }))
                 }
-                className="w-full glass rounded-xl px-4 py-3 text-sm text-foreground/80 placeholder-foreground/25 outline-none focus:border-primary/30 transition-colors bg-transparent resize-none"
+                className="w-full glass rounded-xl px-4 py-3 text-sm text-white/80 placeholder-white/20 outline-none focus:border-primary/30 transition-colors bg-transparent resize-none"
               />
 
               <button
@@ -186,8 +186,8 @@ export default function ContactSection() {
                 disabled={status === "sending"}
                 className="group relative w-full py-3 rounded-xl overflow-hidden disabled:opacity-60"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-90 group-hover:opacity-100 transition-opacity" />
-                <span className="relative z-10 text-sm font-semibold text-white">
+                <span className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-80 group-hover:opacity-100 transition-opacity" />
+                <span className="relative z-10 text-sm font-semibold text-black">
                   {status === "sending"
                     ? "Transmitting..."
                     : status === "success"

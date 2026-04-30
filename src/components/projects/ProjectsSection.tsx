@@ -30,7 +30,7 @@ function ProjectCard({
         } as React.CSSProperties
       }
     >
-      <div className="glass rounded-2xl p-6 md:p-8 h-full transition-all duration-500 hover:shadow-lg relative overflow-hidden">
+      <div className="glass rounded-2xl p-6 md:p-8 h-full transition-all duration-500 hover:border-[var(--project-color)]/30 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700"
           style={{
@@ -46,16 +46,16 @@ function ProjectCard({
             >
               {project.subtitle}
             </span>
-            <span className="text-xs font-mono text-foreground/20">
+            <span className="text-xs font-mono text-white/20">
               0{index + 1}
             </span>
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3 group-hover:text-glow transition-all">
+          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 group-hover:text-glow transition-all">
             {project.title}
           </h3>
 
-          <p className="text-foreground/40 text-sm leading-relaxed mb-6 line-clamp-3">
+          <p className="text-white/40 text-sm leading-relaxed mb-6 line-clamp-3">
             {project.description}
           </p>
 
@@ -63,13 +63,13 @@ function ProjectCard({
             {project.tech.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="text-[10px] font-mono px-3 py-1 rounded-full border border-foreground/10 text-foreground/50"
+                className="text-[10px] font-mono px-3 py-1 rounded-full border border-white/10 text-white/50"
               >
                 {tech}
               </span>
             ))}
             {project.tech.length > 4 && (
-              <span className="text-[10px] font-mono px-3 py-1 rounded-full border border-foreground/10 text-foreground/30">
+              <span className="text-[10px] font-mono px-3 py-1 rounded-full border border-white/10 text-white/30">
                 +{project.tech.length - 4}
               </span>
             )}
@@ -114,7 +114,7 @@ function ProjectModal({
       className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8"
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-foreground/20 backdrop-blur-xl" />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
       <motion.div
         initial={{ scale: 0.9, y: 40 }}
         animate={{ scale: 1, y: 0 }}
@@ -125,7 +125,7 @@ function ProjectModal({
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 w-10 h-10 rounded-full glass flex items-center justify-center text-foreground/50 hover:text-foreground transition-colors"
+          className="absolute top-4 right-4 w-10 h-10 rounded-full glass flex items-center justify-center text-white/60 hover:text-white transition-colors"
         >
           <svg
             width="20"
@@ -146,10 +146,10 @@ function ProjectModal({
           >
             {project.subtitle}
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             {project.title}
           </h2>
-          <p className="text-foreground/50 leading-relaxed">{project.description}</p>
+          <p className="text-white/50 leading-relaxed">{project.description}</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -164,7 +164,7 @@ function ProjectModal({
               {project.features.map((feature) => (
                 <li
                   key={feature}
-                  className="flex items-start gap-3 text-foreground/60 text-sm"
+                  className="flex items-start gap-3 text-white/60 text-sm"
                 >
                   <span style={{ color: project.color }} className="mt-1">
                     &#x25B8;
@@ -183,7 +183,7 @@ function ProjectModal({
               Architecture
             </h3>
             <div className="glass rounded-xl p-4">
-              <code className="text-xs text-foreground/50 font-mono">
+              <code className="text-xs text-white/50 font-mono">
                 {project.architecture}
               </code>
             </div>
@@ -198,7 +198,7 @@ function ProjectModal({
               {project.tech.map((tech) => (
                 <span
                   key={tech}
-                  className="text-xs font-mono px-3 py-1.5 rounded-full border text-foreground/60"
+                  className="text-xs font-mono px-3 py-1.5 rounded-full border text-white/60"
                   style={{ borderColor: `${project.color}30` }}
                 >
                   {tech}
@@ -208,12 +208,12 @@ function ProjectModal({
           </div>
         </div>
 
-        <div className="flex gap-4 pt-4 border-t border-foreground/5">
+        <div className="flex gap-4 pt-4 border-t border-white/5">
           <a
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-2.5 rounded-full glass text-sm font-medium text-foreground/60 hover:text-foreground transition-all"
+            className="px-6 py-2.5 rounded-full glass text-sm font-medium text-white/70 hover:text-white transition-all"
           >
             View Source
           </a>
@@ -221,7 +221,7 @@ function ProjectModal({
             href={project.demo}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-2.5 rounded-full text-sm font-medium text-white"
+            className="px-6 py-2.5 rounded-full text-sm font-medium text-black"
             style={{ backgroundColor: project.color }}
           >
             Live Demo
@@ -247,11 +247,11 @@ export default function ProjectsSection() {
           transition={{ duration: 0.8 }}
           className="mb-16"
         >
-          <span className="text-xs font-mono tracking-[0.3em] text-primary/50 uppercase">
+          <span className="text-xs font-mono tracking-[0.3em] text-primary/60 uppercase">
             Portfolio
           </span>
           <h2 className="text-4xl md:text-5xl font-bold mt-4">
-            <span className="text-foreground">Featured </span>
+            <span className="text-white">Featured </span>
             <span className="gradient-text">Projects</span>
           </h2>
         </motion.div>
