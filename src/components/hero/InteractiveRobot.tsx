@@ -1,207 +1,389 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import { motion, useSpring, useTransform } from "framer-motion";
+import { useRef, useEffect, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Environment } from "@react-three/drei";
+import * as THREE from "three";
+
+const ORANGE = "#c87533";
+const DARK_ORANGE = "#a05a20";
+const VISOR = "#1a1a2e";
+const JOINT = "#2a2a2a";
+
+function RobotEye({
+  position,
+  mouseRef,
+}: {
+  position: [number, number, number];
+  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
+}) {
+  const pupilRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (!pupilRef.current) return;
+    const targetX = mouseRef.current.x * 0.08;
+    const targetY = mouseRef.current.y * 0.06;
+    pupilRef.current.position.x = THREE.MathUtils.lerp(
+      pupilRef.current.position.x,
+      targetX,
+      0.1
+    );
+    pupilRef.current.position.y = THREE.MathUtils.lerp(
+      pupilRef.current.position.y,
+      targetY,
+      0.1
+    );
+  });
+
+  return (
+    <group position={position}>
+      {/* Eye white background */}
+      <mesh>
+        <sphereGeometry args={[0.18, 32, 32]} />
+        <meshStandardMaterial color="#e8e8e8" roughness={0.3} />
+      </mesh>
+      {/* Pupil */}
+      <mesh ref={pupilRef} position={[0, 0, 0.1]}>
+        <sphereGeometry args={[0.09, 16, 16]} />
+        <meshStandardMaterial color="#333333" roughness={0.2} />
+      </mesh>
+    </group>
+  );
+}
+
+function RobotMouth() {
+  const shape = useMemo(() => {
+    const s = new THREE.Shape();
+    s.moveTo(-0.08, 0);
+    s.quadraticCurveTo(0, -0.04, 0.08, 0);
+    return s;
+  }, []);
+
+  return (
+    <group position={[0, -0.18, 0.42]}>
+      <mesh rotation={[0, 0, 0]}>
+        <shapeGeometry args={[shape]} />
+        <meshStandardMaterial
+          color="#ffffff"
+          side={THREE.DoubleSide}
+          roughness={0.3}
+        />
+      </mesh>
+    </group>
+  );
+}
+
+function Limb({
+  position,
+  rotation,
+  segments,
+}: {
+  position: [number, number, number];
+  rotation?: [number, number, number];
+  segments: {
+    radius: number;
+    height: number;
+    color: string;
+    offsetY?: number;
+  }[];
+}) {
+  return (
+    <group position={position} rotation={rotation || [0, 0, 0]}>
+      {segments.map((seg, i) => (
+        <mesh key={i} position={[0, seg.offsetY || 0, 0]}>
+          <capsuleGeometry args={[seg.radius, seg.height, 8, 16]} />
+          <meshStandardMaterial
+            color={seg.color}
+            roughness={0.4}
+            metalness={0.3}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+function RobotCharacter({
+  mouseRef,
+}: {
+  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+  const headRef = useRef<THREE.Group>(null);
+  const rightArmRef = useRef<THREE.Group>(null);
+  const leftArmRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+
+    // Idle floating animation
+    if (groupRef.current) {
+      groupRef.current.position.y =
+        Math.sin(t * 1.2) * 0.05;
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        mouseRef.current.x * 0.3,
+        0.05
+      );
+    }
+
+    // Head follows cursor
+    if (headRef.current) {
+      headRef.current.rotation.y = THREE.MathUtils.lerp(
+        headRef.current.rotation.y,
+        mouseRef.current.x * 0.4,
+        0.08
+      );
+      headRef.current.rotation.x = THREE.MathUtils.lerp(
+        headRef.current.rotation.x,
+        -mouseRef.current.y * 0.2,
+        0.08
+      );
+    }
+
+    // Waving right arm
+    if (rightArmRef.current) {
+      rightArmRef.current.rotation.z =
+        -0.8 + Math.sin(t * 3) * 0.25;
+      rightArmRef.current.rotation.x = Math.sin(t * 2.5) * 0.15;
+    }
+
+    // Left arm idle sway
+    if (leftArmRef.current) {
+      leftArmRef.current.rotation.z = 0.15 + Math.sin(t * 1.5) * 0.05;
+      leftArmRef.current.rotation.x = Math.sin(t * 1.2 + 1) * 0.08;
+    }
+  });
+
+  return (
+    <group ref={groupRef} position={[0, -0.3, 0]} scale={1.3}>
+      {/* === HEAD === */}
+      <group ref={headRef} position={[0, 1.15, 0]}>
+        {/* Head dome / helmet */}
+        <mesh position={[0, 0.15, 0]}>
+          <sphereGeometry args={[0.52, 32, 32, 0, Math.PI * 2, 0, Math.PI * 0.6]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.35} metalness={0.4} />
+        </mesh>
+        {/* Head lower */}
+        <mesh position={[0, -0.05, 0]}>
+          <cylinderGeometry args={[0.48, 0.44, 0.35, 32]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.35} metalness={0.4} />
+        </mesh>
+        {/* Visor / Face screen */}
+        <mesh position={[0, 0.02, 0.32]}>
+          <planeGeometry args={[0.65, 0.45]} />
+          <meshStandardMaterial
+            color={VISOR}
+            roughness={0.1}
+            metalness={0.8}
+          />
+        </mesh>
+        {/* Visor frame */}
+        <mesh position={[0, 0.02, 0.3]}>
+          <boxGeometry args={[0.72, 0.52, 0.08]} />
+          <meshStandardMaterial color={DARK_ORANGE} roughness={0.4} metalness={0.3} />
+        </mesh>
+        {/* Eyes */}
+        <RobotEye position={[-0.15, 0.05, 0.35]} mouseRef={mouseRef} />
+        <RobotEye position={[0.15, 0.05, 0.35]} mouseRef={mouseRef} />
+        {/* Mouth */}
+        <RobotMouth />
+        {/* Ear pieces */}
+        <mesh position={[-0.5, 0.0, 0]}>
+          <cylinderGeometry args={[0.08, 0.08, 0.12, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <mesh position={[0.5, 0.0, 0]}>
+          <cylinderGeometry args={[0.08, 0.08, 0.12, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        {/* Helmet brim */}
+        <mesh position={[0, 0.28, 0.15]} rotation={[0.3, 0, 0]}>
+          <boxGeometry args={[0.55, 0.06, 0.35]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.35} metalness={0.4} />
+        </mesh>
+      </group>
+
+      {/* === NECK === */}
+      <mesh position={[0, 0.82, 0]}>
+        <cylinderGeometry args={[0.1, 0.12, 0.15, 16]} />
+        <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+      </mesh>
+
+      {/* === TORSO === */}
+      <group position={[0, 0.35, 0]}>
+        {/* Upper torso */}
+        <mesh position={[0, 0.2, 0]}>
+          <capsuleGeometry args={[0.32, 0.25, 8, 32]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.35} metalness={0.4} />
+        </mesh>
+        {/* Lower torso */}
+        <mesh position={[0, -0.15, 0]}>
+          <capsuleGeometry args={[0.25, 0.15, 8, 32]} />
+          <meshStandardMaterial color={ORANGE} roughness={0.35} metalness={0.4} />
+        </mesh>
+        {/* Waist joint */}
+        <mesh position={[0, -0.35, 0]}>
+          <sphereGeometry args={[0.12, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+      </group>
+
+      {/* === RIGHT ARM (waving) === */}
+      <group ref={rightArmRef} position={[0.45, 0.55, 0]}>
+        {/* Shoulder joint */}
+        <mesh>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        {/* Upper arm */}
+        <Limb
+          position={[0, -0.2, 0]}
+          segments={[
+            { radius: 0.09, height: 0.2, color: ORANGE },
+          ]}
+        />
+        {/* Elbow */}
+        <mesh position={[0, -0.4, 0]}>
+          <sphereGeometry args={[0.07, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        {/* Lower arm */}
+        <Limb
+          position={[0, -0.55, 0]}
+          segments={[
+            { radius: 0.08, height: 0.15, color: ORANGE },
+          ]}
+        />
+        {/* Hand */}
+        <mesh position={[0, -0.72, 0]}>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        {/* Fingers */}
+        {[-0.04, 0, 0.04].map((xOff, i) => (
+          <mesh key={i} position={[xOff, -0.82, 0]}>
+            <capsuleGeometry args={[0.015, 0.04, 4, 8]} />
+            <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* === LEFT ARM === */}
+      <group ref={leftArmRef} position={[-0.45, 0.55, 0]}>
+        <mesh>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.2, 0]}
+          segments={[
+            { radius: 0.09, height: 0.2, color: ORANGE },
+          ]}
+        />
+        <mesh position={[0, -0.4, 0]}>
+          <sphereGeometry args={[0.07, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.55, 0]}
+          segments={[
+            { radius: 0.08, height: 0.15, color: ORANGE },
+          ]}
+        />
+        <mesh position={[0, -0.72, 0]}>
+          <sphereGeometry args={[0.08, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+      </group>
+
+      {/* === RIGHT LEG === */}
+      <group position={[0.18, -0.15, 0]}>
+        <mesh>
+          <sphereGeometry args={[0.09, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.2, 0]}
+          segments={[
+            { radius: 0.1, height: 0.2, color: ORANGE },
+          ]}
+        />
+        <mesh position={[0, -0.4, 0]}>
+          <sphereGeometry args={[0.07, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.55, 0]}
+          segments={[
+            { radius: 0.09, height: 0.18, color: ORANGE },
+          ]}
+        />
+        {/* Foot */}
+        <mesh position={[0, -0.75, 0.04]}>
+          <boxGeometry args={[0.14, 0.08, 0.22]} />
+          <meshStandardMaterial color={DARK_ORANGE} roughness={0.4} metalness={0.3} />
+        </mesh>
+      </group>
+
+      {/* === LEFT LEG === */}
+      <group position={[-0.18, -0.15, 0]}>
+        <mesh>
+          <sphereGeometry args={[0.09, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.2, 0]}
+          segments={[
+            { radius: 0.1, height: 0.2, color: ORANGE },
+          ]}
+        />
+        <mesh position={[0, -0.4, 0]}>
+          <sphereGeometry args={[0.07, 16, 16]} />
+          <meshStandardMaterial color={JOINT} roughness={0.5} metalness={0.5} />
+        </mesh>
+        <Limb
+          position={[0, -0.55, 0]}
+          segments={[
+            { radius: 0.09, height: 0.18, color: ORANGE },
+          ]}
+        />
+        <mesh position={[0, -0.75, 0.04]}>
+          <boxGeometry args={[0.14, 0.08, 0.22]} />
+          <meshStandardMaterial color={DARK_ORANGE} roughness={0.4} metalness={0.3} />
+        </mesh>
+      </group>
+    </group>
+  );
+}
 
 export default function InteractiveRobot() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [mouse, setMouse] = useState({ x: 0, y: 0 });
-
-  const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
-  const mouseX = useSpring(0, springConfig);
-  const mouseY = useSpring(0, springConfig);
-
-  const eyeX = useTransform(mouseX, [-1, 1], [-6, 6]);
-  const eyeY = useTransform(mouseY, [-1, 1], [-4, 4]);
-  const headRotate = useTransform(mouseX, [-1, 1], [-8, 8]);
-  const headTiltY = useTransform(mouseY, [-1, 1], [3, -3]);
-  const bodyTilt = useTransform(mouseX, [-1, 1], [-2, 2]);
-  const antennaRotate = useTransform(mouseX, [-1, 1], [-15, 15]);
+  const mouseRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = -(e.clientY / window.innerHeight) * 2 + 1;
-      setMouse({ x: nx, y: ny });
-      mouseX.set(nx);
-      mouseY.set(ny);
+      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
     };
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
-
-  const leftBrow = mouse.y > 0.2 ? -3 : mouse.y < -0.3 ? 3 : 0;
-  const rightBrow = mouse.y > 0.2 ? -3 : mouse.y < -0.3 ? 3 : 0;
-  const mouthWidth = Math.abs(mouse.x) > 0.5 ? 28 : 20;
+  }, []);
 
   return (
-    <div ref={containerRef} className="relative select-none pointer-events-none">
-      <motion.div
-        style={{ rotate: bodyTilt }}
-        className="relative w-[180px] h-[220px] md:w-[220px] md:h-[260px]"
+    <div className="w-[280px] h-[350px] md:w-[320px] md:h-[400px]">
+      <Canvas
+        camera={{ position: [0, 0.5, 3.2], fov: 40 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, alpha: true }}
+        style={{ background: "transparent" }}
       >
-        {/* Glow effect behind robot */}
-        <div className="absolute inset-0 rounded-full bg-primary/10 blur-3xl scale-150" />
-        
-        {/* Antenna */}
-        <motion.div
-          style={{ rotate: antennaRotate }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 origin-bottom"
-        >
-          <div className="w-[2px] h-8 md:h-10 bg-gradient-to-t from-primary/60 to-transparent mx-auto" />
-          <motion.div
-            animate={{
-              boxShadow: [
-                "0 0 8px 2px rgba(0,245,255,0.6)",
-                "0 0 16px 4px rgba(0,245,255,0.9)",
-                "0 0 8px 2px rgba(0,245,255,0.6)",
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-3 h-3 md:w-4 md:h-4 rounded-full bg-primary mx-auto -mt-1"
-          />
-        </motion.div>
-
-        {/* Head */}
-        <motion.div
-          style={{ rotate: headRotate, y: headTiltY }}
-          className="absolute top-8 md:top-10 left-1/2 -translate-x-1/2 w-[120px] h-[90px] md:w-[150px] md:h-[110px] origin-bottom"
-        >
-          {/* Head shell */}
-          <div className="absolute inset-0 rounded-[28px] md:rounded-[32px] bg-gradient-to-b from-[#1a1a3e] to-[#0d0d25] border border-primary/20 overflow-hidden">
-            {/* Head inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent" />
-            {/* Scanline effect */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{
-              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.1) 2px, rgba(0,245,255,0.1) 4px)",
-            }} />
-          </div>
-
-          {/* Visor / Eye area */}
-          <div className="absolute top-[22px] md:top-[28px] left-1/2 -translate-x-1/2 w-[90px] md:w-[110px] h-[32px] md:h-[38px] rounded-[16px] bg-[#050515]/80 border border-primary/15 flex items-center justify-center gap-[20px] md:gap-[28px] overflow-hidden">
-            {/* Visor glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
-            
-            {/* Left eye */}
-            <div className="relative w-[22px] h-[22px] md:w-[26px] md:h-[26px]">
-              <div className="absolute inset-0 rounded-full bg-primary/10" />
-              <motion.div
-                style={{ x: eyeX, y: eyeY }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[10px] h-[10px] md:w-[12px] md:h-[12px] rounded-full bg-primary"
-              >
-                <div className="absolute top-[1px] left-[2px] w-[3px] h-[3px] md:w-[4px] md:h-[4px] rounded-full bg-white/80" />
-                <motion.div
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute inset-0 rounded-full bg-primary/40 blur-sm"
-                />
-              </motion.div>
-              {/* Left eyebrow */}
-              <motion.div
-                animate={{ y: leftBrow }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="absolute -top-[6px] left-0 w-full h-[3px] rounded-full bg-primary/40"
-              />
-            </div>
-
-            {/* Right eye */}
-            <div className="relative w-[22px] h-[22px] md:w-[26px] md:h-[26px]">
-              <div className="absolute inset-0 rounded-full bg-accent/10" />
-              <motion.div
-                style={{ x: eyeX, y: eyeY }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[10px] h-[10px] md:w-[12px] md:h-[12px] rounded-full bg-accent"
-              >
-                <div className="absolute top-[1px] left-[2px] w-[3px] h-[3px] md:w-[4px] md:h-[4px] rounded-full bg-white/80" />
-                <motion.div
-                  animate={{ opacity: [0.4, 0.8, 0.4] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                  className="absolute inset-0 rounded-full bg-accent/40 blur-sm"
-                />
-              </motion.div>
-              {/* Right eyebrow */}
-              <motion.div
-                animate={{ y: rightBrow }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="absolute -top-[6px] left-0 w-full h-[3px] rounded-full bg-accent/40"
-              />
-            </div>
-          </div>
-
-          {/* Mouth */}
-          <div className="absolute bottom-[12px] md:bottom-[14px] left-1/2 -translate-x-1/2">
-            <motion.div
-              animate={{ width: mouthWidth }}
-              transition={{ type: "spring", stiffness: 200, damping: 15 }}
-              className="h-[3px] rounded-full bg-gradient-to-r from-primary/50 via-neon/60 to-accent/50"
-            />
-          </div>
-        </motion.div>
-
-        {/* Neck */}
-        <div className="absolute top-[92px] md:top-[112px] left-1/2 -translate-x-1/2 w-[16px] md:w-[20px] h-[10px] md:h-[12px]">
-          <div className="w-full h-full bg-gradient-to-b from-[#1a1a3e] to-[#0d0d25] rounded-sm border-x border-primary/10" />
-        </div>
-
-        {/* Body */}
-        <div
-          className="absolute top-[100px] md:top-[122px] left-1/2 -translate-x-1/2 w-[100px] h-[80px] md:w-[130px] md:h-[100px]"
-        >
-          <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-b from-[#151535] to-[#0a0a20] border border-primary/15 overflow-hidden">
-            {/* Chest light */}
-            <div className="absolute top-[16px] md:top-[20px] left-1/2 -translate-x-1/2">
-              <motion.div
-                animate={{
-                  boxShadow: [
-                    "0 0 6px 2px rgba(0,255,136,0.3)",
-                    "0 0 12px 4px rgba(0,255,136,0.6)",
-                    "0 0 6px 2px rgba(0,255,136,0.3)",
-                  ],
-                }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="w-[10px] h-[10px] md:w-[14px] md:h-[14px] rounded-full bg-neon/80 border border-neon/40"
-              />
-            </div>
-            
-            {/* Circuit lines */}
-            <div className="absolute top-[36px] md:top-[44px] left-[16px] md:left-[20px] right-[16px] md:right-[20px] space-y-[6px] md:space-y-[8px]">
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-accent/15 to-transparent" />
-              <div className="h-[1px] bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-            </div>
-
-            {/* Body inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/3 to-transparent" />
-          </div>
-
-          {/* Shoulder joints */}
-          <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-primary/20" />
-          <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#151535] border border-accent/20" />
-        </div>
-
-        {/* Floating particles around robot */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            animate={{
-              y: [0, -10, 0],
-              opacity: [0.2, 0.6, 0.2],
-              x: [0, i % 2 === 0 ? 5 : -5, 0],
-            }}
-            transition={{
-              duration: 2 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.4,
-            }}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              background: i % 2 === 0 ? "#00f5ff" : "#ff00ff",
-              top: `${20 + i * 15}%`,
-              left: i % 2 === 0 ? `-${10 + i * 3}%` : `${100 + i * 3}%`,
-            }}
-          />
-        ))}
-      </motion.div>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[3, 5, 4]} intensity={1.2} color="#ffffff" />
+        <directionalLight position={[-2, 3, -2]} intensity={0.4} color="#ffa040" />
+        <pointLight position={[0, 2, 3]} intensity={0.6} color="#00f5ff" distance={8} />
+        <Environment preset="city" />
+        <RobotCharacter mouseRef={mouseRef} />
+      </Canvas>
     </div>
   );
 }
