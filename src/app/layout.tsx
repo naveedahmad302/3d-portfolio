@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Naveed Ahmed | Full-Stack Developer & Creative Engineer",
+  title: "Naveed Ahmad | Full-Stack Developer & Creative Engineer",
   description:
-    "Ultra-premium 3D developer portfolio showcasing cutting-edge web experiences, full-stack development, and creative engineering by Naveed Ahmed.",
+    "Ultra-premium 3D developer portfolio showcasing cutting-edge web experiences, full-stack development, and creative engineering by Naveed Ahmad.",
   keywords: [
     "developer",
     "portfolio",
@@ -27,18 +27,18 @@ export const metadata: Metadata = {
     "creative",
     "engineer",
   ],
-  authors: [{ name: "Naveed Ahmed" }],
+  authors: [{ name: "Naveed Ahmad" }],
   openGraph: {
-    title: "Naveed Ahmed | Full-Stack Developer",
+    title: "Naveed Ahmad | Full-Stack Developer",
     description:
       "Immersive 3D developer portfolio — pushing the boundaries of web experiences.",
     type: "website",
     locale: "en_US",
-    siteName: "Naveed Ahmed Portfolio",
+    siteName: "Naveed Ahmad Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Naveed Ahmed | Full-Stack Developer",
+    title: "Naveed Ahmad | Full-Stack Developer",
     description:
       "Immersive 3D developer portfolio — pushing the boundaries of web experiences.",
   },

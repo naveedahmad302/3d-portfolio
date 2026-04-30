@@ -1,5 +1,5 @@
 export const personalInfo = {
-  name: "Naveed Ahmed",
+  name: "Naveed Ahmad",
   title: "Full-Stack Developer & Creative Engineer",
   tagline: "Building the future, one pixel at a time",
   email: "naveed6028@gmail.com",
@@ -171,7 +171,7 @@ export const terminalCommands: Record<string, string> = {
 
   about: `
 ┌─────────────────────────────────────────┐
-│          NAVEED AHMED                    │
+│          NAVEED AHMAD                    │
 │     Full-Stack Developer &              │
 │     Creative Engineer                   │
 ├─────────────────────────────────────────┤

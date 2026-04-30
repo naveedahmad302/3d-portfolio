@@ -5,7 +5,7 @@ from app.api import contact, projects, visitors
 
 app = FastAPI(
     title="Portfolio API",
-    description="Backend API for Naveed Ahmed's developer portfolio",
+    description="Backend API for Naveed Ahmad's developer portfolio",
     version="1.0.0",
 )
 

@@ -1,4 +1,4 @@
-# Naveed Ahmed — Ultra-Premium 3D Developer Portfolio
+# Naveed Ahmad — Ultra-Premium 3D Developer Portfolio
 
 A cinematic, immersive, and visually groundbreaking developer portfolio built with cutting-edge web technologies. This is not a traditional portfolio — it's a next-generation digital experience.
 

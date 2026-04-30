@@ -58,7 +58,7 @@ export default function Footer() {
           </div>
 
           <div className="text-xs text-white/20 font-mono">
-            &copy; {new Date().getFullYear()} Naveed Ahmed. All rights reserved.
+            &copy; {new Date().getFullYear()} Naveed Ahmad. All rights reserved.
           </div>
         </div>
       </div>
