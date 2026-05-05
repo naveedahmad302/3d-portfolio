@@ -69,7 +69,7 @@ export default function InteractiveRobot() {
           className="absolute top-8 md:top-10 left-1/2 -translate-x-1/2 w-[120px] h-[90px] md:w-[150px] md:h-[110px] origin-bottom"
         >
           {/* Head shell */}
-          <div className="absolute inset-0 rounded-[28px] md:rounded-[32px] bg-gradient-to-b from-[#2a2a4a] to-[#1a1a35] border border-primary/25 overflow-hidden">
+          <div className="absolute inset-0 rounded-[28px] md:rounded-[32px] bg-white/10 backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-white/5">
             {/* Head inner glow */}
             <div className="absolute inset-0 bg-gradient-to-b from-primary/8 to-transparent" />
             {/* Scanline effect */}
@@ -79,7 +79,7 @@ export default function InteractiveRobot() {
           </div>
 
           {/* Visor / Eye area */}
-          <div className="absolute top-[22px] md:top-[28px] left-1/2 -translate-x-1/2 w-[90px] md:w-[110px] h-[32px] md:h-[38px] rounded-[16px] bg-[#12122a]/80 border border-primary/20 flex items-center justify-center gap-[20px] md:gap-[28px] overflow-hidden">
+          <div className="absolute top-[22px] md:top-[28px] left-1/2 -translate-x-1/2 w-[90px] md:w-[110px] h-[32px] md:h-[38px] rounded-[16px] bg-slate-900/40 backdrop-blur-sm border border-white/20 flex items-center justify-center gap-[20px] md:gap-[28px] overflow-hidden">
             {/* Visor glow */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
             
@@ -140,14 +140,14 @@ export default function InteractiveRobot() {
 
         {/* Neck */}
         <div className="absolute top-[92px] md:top-[112px] left-1/2 -translate-x-1/2 w-[16px] md:w-[20px] h-[10px] md:h-[12px]">
-          <div className="w-full h-full bg-gradient-to-b from-[#2a2a4a] to-[#1a1a35] rounded-sm border-x border-primary/15" />
+          <div className="w-full h-full bg-white/15 backdrop-blur-sm rounded-sm border-x border-white/25" />
         </div>
 
         {/* Body */}
         <div
           className="absolute top-[100px] md:top-[122px] left-1/2 -translate-x-1/2 w-[100px] h-[80px] md:w-[130px] md:h-[100px]"
         >
-          <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-gradient-to-b from-[#252548] to-[#181832] border border-primary/20 overflow-hidden">
+          <div className="absolute inset-0 rounded-[20px] md:rounded-[24px] bg-white/10 backdrop-blur-md border border-white/30 overflow-hidden shadow-lg shadow-white/5">
             {/* Chest light */}
             <div className="absolute top-[16px] md:top-[20px] left-1/2 -translate-x-1/2">
               <motion.div
@@ -175,8 +175,8 @@ export default function InteractiveRobot() {
           </div>
 
           {/* Shoulder joints */}
-          <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#252548] border border-primary/25" />
-          <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-[#252548] border border-accent/25" />
+          <div className="absolute top-[8px] md:top-[10px] -left-[8px] md:-left-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-white/15 backdrop-blur-sm border border-white/30" />
+          <div className="absolute top-[8px] md:top-[10px] -right-[8px] md:-right-[10px] w-[12px] h-[12px] md:w-[16px] md:h-[16px] rounded-full bg-white/15 backdrop-blur-sm border border-white/30" />
         </div>
 
         {/* Floating particles around robot */}

@@ -37,11 +37,12 @@ export default function AboutSection() {
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10 shadow-xl shadow-white/5"
           >
-            <p className="text-white/60 leading-relaxed text-lg mb-6">
+            <p className="text-white/70 leading-relaxed text-lg mb-6">
               {personalInfo.bio}
             </p>
-            <p className="text-white/40 leading-relaxed">
+            <p className="text-white/50 leading-relaxed">
               With expertise spanning frontend artistry to backend architecture,
               I transform complex problems into elegant, performant solutions.
               Every project is an opportunity to push boundaries and create
@@ -53,7 +54,7 @@ export default function AboutSection() {
                 href={personalInfo.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full glass text-sm text-primary hover:bg-primary/10 transition-all"
+                className="px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm text-primary hover:bg-white/20 transition-all"
               >
                 GitHub
               </a>
@@ -61,7 +62,7 @@ export default function AboutSection() {
                 href={personalInfo.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-2.5 rounded-full glass text-sm text-white/60 hover:text-white transition-all"
+                className="px-6 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm text-white/70 hover:bg-white/20 hover:text-white transition-all"
               >
                 LinkedIn
               </a>
@@ -80,7 +81,7 @@ export default function AboutSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.5 + i * 0.1 }}
-                className="glass rounded-2xl p-6 text-center hover:glow-primary transition-all duration-500"
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center border border-white/20 shadow-lg shadow-white/5 hover:bg-white/15 hover:border-white/30 transition-all duration-500"
               >
                 <div className="text-3xl md:text-4xl font-bold gradient-text mb-2">
                   {stat.value}
